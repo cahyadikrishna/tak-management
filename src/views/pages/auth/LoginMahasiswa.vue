@@ -2,7 +2,7 @@
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-// import api from "@/api/api";
+import api from "@/api/api";
 
 const router = useRouter();
 
@@ -13,9 +13,9 @@ const loginData = reactive({
 
 async function handleLogin() {
   console.log(loginData);
-  const response = await axios({
+  const response = await api({
     method: "POST",
-    url: "https://dipadana.my.id/admin/login",
+    url: "/mahasiswa/login",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

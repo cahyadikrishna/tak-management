@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import Nav from "@/components/Nav.vue";
 import SideNav from "@/components/SideNav.vue";
 import Footer from "@/components/Footer.vue";
 import TableValidasiTAK from "@/views/content/widgets/tables/TableValidasiTAK.vue";
-
 import api from "@/api/api";
 
 interface IValidasiTAK {
@@ -24,14 +23,11 @@ async function displayTAK() {
     method: "GET",
     url: "/tak?status=false",
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
       Authorization: localStorage.getItem("token") ?? "",
     },
   });
   const dataTAK = response.data;
   validasiTAK.value = dataTAK;
-  console.log(dataTAK);
 }
 displayTAK();
 </script>
@@ -54,7 +50,7 @@ displayTAK();
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">No</th>
                     <th scope="col">Nama Kegiatan</th>
                     <th scope="col">Poin TAK</th>
                     <th scope="col">Tingkatan</th>

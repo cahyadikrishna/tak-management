@@ -14,9 +14,6 @@ interface TodoListData {
 }
 const todoListData = ref<TodoListData[]>([]);
 
-// const requestHeaders: HeadersInit = new Headers();
-// requestHeaders.set("Content-Type", "application/json");
-
 async function displayTodo() {
   const response = await api({
     method: "GET",

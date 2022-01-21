@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Nav from "@/components/Nav.vue";
 import SideNav from "@/components/SideNav.vue";
-import Content from "@/components/Content.vue";
 import Footer from "@/components/Footer.vue";
 </script>
 

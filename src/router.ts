@@ -5,53 +5,65 @@ import Login from "@/views/pages/auth/LoginMahasiswa.vue";
 import Layout from "@/views/pages/Layout.vue";
 import Dashboard from "@/views/pages/Dashboard.vue";
 import ValidasiTAK from "@/views/pages/kmhs/ValidasiTAK.vue";
+import ManageMahasiswa from "@/views/pages/kmhs/ManageMahasiswa.vue";
+import DetailMahasiswa from "@/views/pages/kmhs/DetailMahasiswa.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    component: LoginAdmin,
-    // children: [
-    //   {
-    //     path: "/dashboard",
-    //     name: "dashboard",
-    //     component: Dashboard,
-    //   },
-    //   {
-    //     path: "/validasitak",
-    //     name: "validasitak",
-    //     component: ValidasiTAK,
-    //   },
-    // ],
+    redirect: "/dashboard",
+    component: Layout,
+    beforeEnter: (_, __, next) => {
+      if (localStorage.getItem("token")) next();
+      else next("/login");
+    },
+    children: [
+      {
+        path: "/dashboard",
+        name: "dashboard",
+        component: Dashboard,
+      },
+      {
+        path: "/validasitak",
+        name: "validasitak",
+        component: ValidasiTAK,
+      },
+      {
+        path: "/listmahasiswa",
+        name: "listmahasiswa",
+        component: ManageMahasiswa,
+        children: [
+          {
+            path: "/detailmhs/:nim",
+            name: "detailmhs",
+            component: DetailMahasiswa,
+          },
+        ],
+      },
+    ],
   },
   {
     path: "/login",
     name: "login",
     component: Login,
-  },
-  // {
-  //   path: "/admin",
-  //   name: "admin",
-  //   component: LoginAdmin,
-  // },
-  {
-    path: "/dashboard",
-    name: "dashboard",
-    component: Dashboard,
+    beforeEnter: (_, __, next) => {
+      if (!localStorage.getItem("token")) next();
+      else next("/dashboard");
+    },
   },
   {
-    path: "/validasitak",
-    name: "validasitak",
-    component: ValidasiTAK,
+    path: "/admin",
+    name: "admin",
+    component: LoginAdmin,
+    beforeEnter: (_, __, next) => {
+      if (!localStorage.getItem("token")) next();
+      else next("/dashboard");
+    },
   },
-  // {
-  //   path: "/add",
-  //   name: "add",
-  //   component: () => import("./components/AddTutorial.vue"),
-  // },
   // {
   //   path: "/:pathMatch(.*)*",
   //   name: "NotFound",
-  //   component: () => import("./components/NotFound.vue"),
+  //   component: NotFound,
   // },
 ];
 

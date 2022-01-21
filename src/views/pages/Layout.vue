@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import Nav from "@/components/Nav.vue";
+import SideNav from "@/components/SideNav.vue";
+import Dashboard from "@/views/pages/Dashboard.vue";
+import Footer from "@/components/Footer.vue";
+</script>
+
 <template>
-  <h1>THIS IS LAYOUT</h1>
+  <router-view />
 </template>

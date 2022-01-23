@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const userLoginData = reactive({
+  name: localStorage.getItem("name"),
+  role: localStorage.getItem("role"),
+});
+
+function handleLogOut() {
+  localStorage.removeItem("name");
+  localStorage.removeItem("role");
+  localStorage.removeItem("token");
+
+  router.push("/login");
+}
+</script>
+
 <template>
   <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
@@ -43,12 +63,58 @@
           class="dropdown-menu dropdown-menu-end"
           aria-labelledby="navbarDropdown"
         >
-          <li><a class="dropdown-item" href="#!">Settings</a></li>
-          <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-          <li><hr class="dropdown-divider" /></li>
-          <li><a class="dropdown-item" href="#!">Logout</a></li>
+          <div
+            class="container d-flex justify-content-center align-items-center"
+          >
+            <div class="py-4 p-2">
+              <div>
+                <img
+                  src="https://i.imgur.com/EnANUqj.jpg"
+                  class="rounded"
+                  width="100"
+                />
+              </div>
+              <div class="mt-3 d-flex flex-row justify-content-center">
+                <h5>{{ userLoginData.name }}</h5>
+                <span class="dots"><i class="fa fa-check"></i></span>
+              </div>
+              <span>{{ userLoginData.role }}</span>
+            </div>
+            <li><hr class="dropdown-divider" /></li>
+          </div>
+          <li>
+            <a class="dropdown-item" href="#!" @click.prevent="handleLogOut"
+              >Logout</a
+            >
+          </li>
         </ul>
       </li>
     </ul>
   </nav>
 </template>
+
+<style scoped>
+.dots {
+  height: 20px;
+  width: 20px;
+  margin-top: 4px;
+  margin-left: 4px;
+  background-color: #dc3545;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 10px;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px;
+  border-top: 1px solid #eee;
+  cursor: pointer;
+}
+</style>

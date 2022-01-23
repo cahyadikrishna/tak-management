@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import Nav from "@/components/Nav.vue";
 import SideNav from "@/components/SideNav.vue";
 import Footer from "@/components/Footer.vue";
@@ -106,6 +106,9 @@ displayListMahasiswa();
                             <label for="inputNIM">Nama</label>
                           </div>
                           <div class="form-floating mb-3">
+                            <Datepicker></Datepicker>
+                          </div>
+                          <div class="form-floating mb-3">
                             <input
                               class="form-control"
                               id="inputNIM"
@@ -147,17 +150,6 @@ displayListMahasiswa();
                               <option value="2">Teknik Informatika</option>
                             </select>
                             <label for="inputNIM">Prodi</label>
-                          </div>
-                          <div class="form-floating mb-3">
-                            <select
-                              class="form-select"
-                              aria-label="Default select example"
-                            >
-                              <option selected>Pilih</option>
-                              <option value="1">Laki - Laki</option>
-                              <option value="2">Perempuan</option>
-                            </select>
-                            <label for="inputNIM">Tanggal Lahir</label>
                           </div>
                           <div class="form-floating mb-3">
                             <input

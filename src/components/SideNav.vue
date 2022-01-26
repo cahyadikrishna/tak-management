@@ -3,6 +3,7 @@ import { reactive } from "vue";
 
 const user = reactive({
   role: localStorage.getItem("role"),
+  name: localStorage.getItem("name"),
 });
 </script>
 
@@ -71,7 +72,7 @@ const user = reactive({
     </div>
     <div class="sb-sidenav-footer">
       <div class="small">Logged in as:</div>
-      Start Bootstrap
+      {{ user.name }}
     </div>
   </nav>
 </template>

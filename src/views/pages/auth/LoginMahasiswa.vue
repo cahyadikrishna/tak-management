@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
 import api from "@/api/api";
 
 const router = useRouter();
@@ -11,8 +10,10 @@ const loginData = reactive({
   password: "",
 });
 
+const emit = defineEmits(["loadingStatus"]);
+
 async function handleLogin() {
-  console.log(loginData);
+  emit("loadingStatus", true);
   const response = await api({
     method: "POST",
     url: "/mahasiswa/login",
@@ -23,19 +24,18 @@ async function handleLogin() {
     },
     data: JSON.stringify(loginData),
   });
-  console.log(response.data);
 
   if (response.data.token) {
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("name", response.data.name);
     localStorage.setItem("role", response.data.role);
+    localStorage.setItem("nim", response.data.nim);
     //redirect to dashboard page
-    router.push({
-      name: "dashboard",
-    });
+    router.push("/dashboard");
   } else {
     alert("Your data not Valid");
   }
+  emit("loadingStatus", false);
 }
 </script>
 <template>
@@ -47,9 +47,7 @@ async function handleLogin() {
             <div class="col-lg-5">
               <div class="card shadow-lg border-0 rounded-lg mt-5">
                 <div class="card-header">
-                  <h3 class="text-center font-weight-light my-2">
-                    Login TAK Management
-                  </h3>
+                  <h3 class="text-center font-weight-light my-2">Login TAK Management</h3>
                 </div>
                 <div class="card-body">
                   <form @submit.prevent="handleLogin">

@@ -3,32 +3,33 @@ import { ref } from "vue";
 import Nav from "@/components/Nav.vue";
 import SideNav from "@/components/SideNav.vue";
 import Footer from "@/components/Footer.vue";
-import TableValidasiTAK from "@/views/content/widgets/tables/TableValidasiTAK.vue";
+import TableListTAK from "@/views/content/widgets/tables/TableListTAK.vue";
+
 import api from "@/api/api";
 
-interface IValidasiTAK {
-  id: string;
-  image: string;
+interface IListTAK {
+  id: number;
   mahasiswaNIM: number;
   name: string;
-  point_TAK: number;
+  image: string;
   tingkatan: string;
+  point_TAK: number;
   verifed_status: boolean;
 }
 
-const validasiTAK = ref<IValidasiTAK[]>([]);
+const listDataTAK = ref<IListTAK[]>([]);
 
-async function displayTAK() {
+async function displayListTAK() {
   const response = await api({
     method: "GET",
-    url: "/tak?status=false",
+    url: `mahasiswa/${localStorage.getItem("nim")}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
   });
-  validasiTAK.value = { ...response.data };
+  listDataTAK.value = { ...response.data.tak };
 }
-displayTAK();
+displayListTAK();
 </script>
 
 <template>
@@ -41,29 +42,29 @@ displayTAK();
       <div id="layoutSidenav_content">
         <main>
           <div class="container-fluid px-4">
-            <h1 class="mt-4">Validasi TAK</h1>
+            <h1 class="mt-4">List TAK</h1>
             <ol class="breadcrumb mb-4">
-              <li class="breadcrumb-item active">validasitak</li>
+              <li class="breadcrumb-item active">listtak</li>
             </ol>
+
             <div class="card mb-4">
               <table class="table">
                 <thead>
                   <tr>
                     <th scope="col">No</th>
                     <th scope="col">Nama Kegiatan</th>
-                    <th scope="col">Poin TAK</th>
                     <th scope="col">Tingkatan</th>
+                    <th scope="col">Poin TAK</th>
                     <th scope="col">Status</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <TableValidasiTAK
-                    v-for="data in validasiTAK"
-                    :id="data.id"
+                  <TableListTAK
+                    v-for="data in listDataTAK"
                     :name="data.name"
-                    :point_TAK="data.point_TAK"
                     :tingkatan="data.tingkatan"
+                    :point_TAK="data.point_TAK"
                     :verifed_status="data.verifed_status"
                   />
                 </tbody>

@@ -5,7 +5,10 @@ import Login from "@/views/pages/auth/LoginMahasiswa.vue";
 import Layout from "@/views/pages/Layout.vue";
 import Dashboard from "@/views/pages/Dashboard.vue";
 import ValidasiTAK from "@/views/pages/kmhs/ValidasiTAK.vue";
+import UploadTAK from "@/views/pages/kmhs/UploadTAK.vue";
+import ListTAK from "@/views/pages/kmhs/ListTAK.vue";
 import ManageMahasiswa from "@/views/pages/kmhs/ManageMahasiswa.vue";
+import ManageAdmin from "@/views/pages/kmhs/ManageAdmin.vue";
 import DetailMahasiswa from "@/views/pages/kmhs/DetailMahasiswa.vue";
 
 const routes: Array<RouteRecordRaw> = [
@@ -27,6 +30,21 @@ const routes: Array<RouteRecordRaw> = [
         path: "/validasitak",
         name: "validasitak",
         component: ValidasiTAK,
+      },
+      {
+        path: "/uploadtak",
+        name: "uploadtak",
+        component: UploadTAK,
+      },
+      {
+        path: "/listtak",
+        name: "listtak",
+        component: ListTAK,
+      },
+      {
+        path: "/listadmin",
+        name: "listadmin",
+        component: ManageAdmin,
       },
       {
         path: "/listmahasiswa",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import Nav from "@/components/Nav.vue";
 import SideNav from "@/components/SideNav.vue";
 import Footer from "@/components/Footer.vue";
@@ -9,11 +9,8 @@ import api from "@/api/api";
 
 interface IListMahasiswa {
   nim: number;
-  birth_date: number;
   email: string;
   name: string;
-  prodi: string;
-  tak: [];
 }
 
 const listMahasiswa = ref<IListMahasiswa[]>([]);
@@ -23,16 +20,50 @@ async function displayListMahasiswa() {
     method: "GET",
     url: "/mahasiswa",
     headers: {
+      Authorization: localStorage.getItem("token") ?? "",
+    },
+  });
+  listMahasiswa.value = response.data;
+}
+displayListMahasiswa();
+
+//register mahasiswa
+const dataRegisterMahasiswa = reactive({
+  nim: null,
+  name: "",
+  email: "",
+  password: "",
+  angkatan: null,
+  gender: "",
+  prodi: "",
+  birthDate: "",
+});
+
+const options = reactive({
+  genOptions: [
+    { text: "Laki - laki", value: "PRIA" },
+    { text: "Perempuan", value: "WANITA" },
+  ],
+  aktOptions: [
+    { text: "Sistem Informasi", value: "SI" },
+    { text: "Sistem Informasi Akutansi", value: "SIA" },
+    { text: "Informatika", value: "IF" },
+  ],
+});
+
+async function registerMahasiswa() {
+  await api({
+    method: "POST",
+    url: "/mahasiswa/register",
+    headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: localStorage.getItem("token") ?? "",
     },
+    data: { ...dataRegisterMahasiswa },
   });
-  const dataListMahasiswa = response.data;
-  listMahasiswa.value = dataListMahasiswa;
-  console.log(dataListMahasiswa);
+  displayListMahasiswa();
 }
-displayListMahasiswa();
 </script>
 
 <template>
@@ -73,9 +104,7 @@ displayListMahasiswa();
               <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                      New Mahasiswa
-                    </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">New Mahasiswa</h5>
                     <button
                       type="button"
                       class="btn-close"
@@ -86,36 +115,41 @@ displayListMahasiswa();
                   <div class="modal-body">
                     <div class="row">
                       <div class="card-body">
-                        <form>
+                        <form @submit.prevent="registerMahasiswa">
                           <div class="form-floating mb-3">
                             <input
                               class="form-control"
                               id="inputNIM"
-                              type="text"
+                              type="number"
                               placeholder="input nim"
+                              v-model="dataRegisterMahasiswa.nim"
                             />
                             <label for="inputNIM">NIM</label>
                           </div>
                           <div class="form-floating mb-3">
                             <input
                               class="form-control"
-                              id="inputNIM"
+                              id="inputNama"
                               type="text"
-                              placeholder="input nim"
+                              placeholder="input nama"
+                              v-model="dataRegisterMahasiswa.name"
                             />
                             <label for="inputNIM">Nama</label>
                           </div>
                           <div class="form-floating mb-3">
-                            <Datepicker></Datepicker>
+                            <Datepicker
+                              v-model="dataRegisterMahasiswa.birthDate"
+                            ></Datepicker>
                           </div>
                           <div class="form-floating mb-3">
                             <input
                               class="form-control"
-                              id="inputNIM"
+                              id="inputEmail"
                               type="text"
-                              placeholder="input nim"
+                              placeholder="input email"
+                              v-model="dataRegisterMahasiswa.email"
                             />
-                            <label for="inputNIM">Email</label>
+                            <label for="inputEmail">Email</label>
                           </div>
                           <div class="form-floating mb-3">
                             <input
@@ -123,47 +157,60 @@ displayListMahasiswa();
                               id="inputAkt"
                               type="number"
                               placeholder="input angkatan"
+                              v-model="dataRegisterMahasiswa.angkatan"
                             />
-                            <label for="inputNIM">Angkatan</label>
+                            <label for="inputAkt">Angkatan</label>
                           </div>
                           <div class="form-floating mb-3">
                             <select
+                              id="inputGen"
                               class="form-select"
                               aria-label="Default select example"
+                              v-model="dataRegisterMahasiswa.gender"
                             >
-                              <option selected>Pilih</option>
-                              <option value="1">Laki - Laki</option>
-                              <option value="2">Perempuan</option>
-                            </select>
-                            <label for="inputNIM">Jenis Kelamin</label>
-                          </div>
-                          <div class="form-floating mb-3">
-                            <select
-                              class="form-select"
-                              aria-label="Default select example"
-                            >
-                              <option selected>Pilih</option>
-                              <option value="1">Sistem Informasi</option>
-                              <option value="2">
-                                Sistem Informasi Akuntansi
+                              <option disabled value="">Pilih</option>
+                              <option
+                                v-for="option in options.genOptions"
+                                :value="option.value"
+                              >
+                                {{ option.text }}
                               </option>
-                              <option value="2">Teknik Informatika</option>
                             </select>
-                            <label for="inputNIM">Prodi</label>
+                            <label for="inputGen">Jenis Kelamin</label>
+                          </div>
+                          <div class="form-floating mb-3">
+                            <select
+                              id="inputProd"
+                              class="form-select"
+                              aria-label="Default select example"
+                              v-model="dataRegisterMahasiswa.prodi"
+                            >
+                              <option disabled value="">Pilih</option>
+                              <option
+                                v-for="option in options.aktOptions"
+                                :value="option.value"
+                              >
+                                {{ option.text }}
+                              </option>
+                            </select>
+                            <label for="inputProd">Prodi</label>
                           </div>
                           <div class="form-floating mb-3">
                             <input
                               class="form-control"
-                              id="inputNIM"
+                              id="inputPass"
                               type="text"
                               placeholder="input nim"
+                              v-model="dataRegisterMahasiswa.password"
                             />
-                            <label for="inputNIM">Password</label>
+                            <label for="inputPass">Password</label>
                           </div>
                           <div
                             class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
                           >
-                            <button class="btn btn-primary">Save</button>
+                            <button class="btn btn-primary" data-bs-dismiss="modal">
+                              Save
+                            </button>
                           </div>
                         </form>
                       </div>
@@ -188,11 +235,8 @@ displayListMahasiswa();
                   <TableListMahasiswa
                     v-for="data in listMahasiswa"
                     :nim="data.nim"
-                    :birth_date="data.birth_date"
                     :email="data.email"
                     :name="data.name"
-                    :prodi="data.prodi"
-                    :tak="data.tak"
                   />
                 </tbody>
               </table>

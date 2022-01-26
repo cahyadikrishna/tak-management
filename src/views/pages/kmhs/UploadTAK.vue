@@ -9,7 +9,7 @@ import api from "@/api/api";
 const dataFormTAK = reactive({
   name: "",
   nim: localStorage.getItem("nim"),
-  tingkatan: "KOTA",
+  tingkatan: "",
   image: null,
 });
 
@@ -29,26 +29,25 @@ formData.append("tingkatan", dataFormTAK.tingkatan);
 formData.append("image", dataFormTAK.image ?? "");
 
 function onFileChange(event) {
-  dataFormTAK.image = event.target.files[0].path;
+  dataFormTAK.image = event.target.files[0];
 }
 
 async function uploadTak() {
+  console.log(dataFormTAK);
+  console.log(formData);
   try {
-    console.log(dataFormTAK);
-
     const response = await api({
       method: "POST",
       url: "/tak",
       headers: {
         Authorization: localStorage.getItem("token") ?? "",
       },
-      data: { ...formData },
+      data: formData,
     });
-    // console.log(response.error.message);
+    console.log(response);
   } catch (error) {
     console.log(error.response.data.message);
   }
-  console.log(dataFormTAK);
 }
 </script>
 
@@ -70,7 +69,7 @@ async function uploadTak() {
             <!-- modal -->
             <div class="row">
               <div class="card-body">
-                <form @submit.prevent="uploadTak">
+                <form @submit.prevent="uploadTak" enctype="multipart/form-data">
                   <div class="form-floating mb-3">
                     <select
                       id="inputTk"
@@ -108,7 +107,9 @@ async function uploadTak() {
                       @change="onFileChange"
                     />
                   </div>
-                  <div class="d-flex align-items-center justify-content-md-end mt-4 mb-0">
+                  <div
+                    class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
+                  >
                     <button class="btn btn-primary">Upload</button>
                   </div>
                 </form>

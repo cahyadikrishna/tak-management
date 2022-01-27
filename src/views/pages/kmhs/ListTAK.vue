@@ -8,7 +8,7 @@ import TableListTAK from "@/views/content/widgets/tables/TableListTAK.vue";
 import api from "@/api/api";
 
 interface IListTAK {
-  id: number;
+  id: string;
   mahasiswaNIM: number;
   name: string;
   image: string;
@@ -62,10 +62,12 @@ displayListTAK();
                 <tbody>
                   <TableListTAK
                     v-for="data in listDataTAK"
+                    :id="data.id"
                     :name="data.name"
                     :tingkatan="data.tingkatan"
                     :point_TAK="data.point_TAK"
                     :verifed_status="data.verifed_status"
+                    :displayListTAK="displayListTAK"
                   />
                 </tbody>
               </table>

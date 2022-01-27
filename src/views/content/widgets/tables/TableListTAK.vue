@@ -1,10 +1,34 @@
 <script setup lang="ts">
-defineProps({
+import api from "@/api/api";
+
+const props = defineProps({
+  id: { type: String, default: "" },
   name: { type: String, default: "" },
   tingkatan: { type: String, default: "" },
   point_TAK: { type: Number, default: 0 },
   verifed_status: { type: Boolean, default: false },
+  displayListTAK: {
+    type: Function,
+    default() {
+      return {};
+    },
+  },
 });
+
+//delete TAK
+async function deleteTAK(id: any) {
+  const response = await api({
+    method: "DELETE",
+    url: `tak/${props.id}`,
+    headers: {
+      Authorization: localStorage.getItem("token") ?? "",
+    },
+  });
+  if (response) {
+    alert(response.data.message);
+  }
+  props.displayListTAK();
+}
 </script>
 
 <template>
@@ -82,7 +106,9 @@ defineProps({
                   />
                   <label for="inputPass">Password</label>
                 </div>
-                <div class="d-flex align-items-center justify-content-md-end mt-4 mb-0">
+                <div
+                  class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
+                >
                   <button class="btn btn-primary">Save</button>
                 </div>
               </form>
@@ -92,7 +118,7 @@ defineProps({
       </div>
     </div>
   </div>
-  <tr>
+  <tr id="{{id}}">
     <th>1</th>
     <td>{{ name }}</td>
     <td>{{ tingkatan }}</td>
@@ -103,9 +129,18 @@ defineProps({
         data-bs-toggle="modal"
         data-bs-target="#viewTAK"
         type="button"
-        class="btn btn-dark btn-sm"
+        class="btn btn-warning btn-sm me-2"
+        @click=""
       >
-        <i class="txt-white fas fa-eye"></i>
+        <i style="color: white" class="fas fa-pencil-alt"></i>
+      </button>
+      <button
+        v-if="props.verifed_status === false"
+        type="button"
+        class="btn btn-danger btn-sm"
+        @click="deleteTAK(id)"
+      >
+        <i class="txt-white fas fa-trash"></i>
       </button>
     </td>
   </tr>

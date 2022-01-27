@@ -51,7 +51,7 @@ displayListAdmin();
                 class="btn btn-primary mb-3"
                 type="button"
               >
-                New Mahasiswa
+                New Admin
               </button>
             </div>
 
@@ -161,6 +161,7 @@ displayListAdmin();
                     :nidn="data.nidn"
                     :name="data.name"
                     :email="data.email"
+                    :displayListAdmin="displayListAdmin"
                   />
                 </tbody>
               </table>

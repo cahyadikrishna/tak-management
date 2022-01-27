@@ -22,32 +22,35 @@ const options = reactive({
   ],
 });
 
-const formData = new FormData();
-formData.append("name", dataFormTAK.name);
-formData.append("nim", dataFormTAK.nim ?? "");
-formData.append("tingkatan", dataFormTAK.tingkatan);
-formData.append("image", dataFormTAK.image ?? "");
-
-function onFileChange(event) {
+function onFileChange(event: any) {
   dataFormTAK.image = event.target.files[0];
 }
 
+function clearForm() {
+  dataFormTAK.name = "";
+  dataFormTAK.tingkatan = "";
+  dataFormTAK.image = null;
+}
+
 async function uploadTak() {
-  console.log(dataFormTAK);
-  console.log(formData);
-  try {
-    const response = await api({
-      method: "POST",
-      url: "/tak",
-      headers: {
-        Authorization: localStorage.getItem("token") ?? "",
-      },
-      data: formData,
-    });
-    console.log(response);
-  } catch (error) {
-    console.log(error.response.data.message);
+  const formData = new FormData();
+  formData.append("name", dataFormTAK.name);
+  formData.append("nim", dataFormTAK.nim ?? "");
+  formData.append("tingkatan", dataFormTAK.tingkatan);
+  formData.append("image", dataFormTAK.image ?? "");
+
+  const response = await api({
+    method: "POST",
+    url: "/tak",
+    headers: {
+      Authorization: localStorage.getItem("token") ?? "",
+    },
+    data: formData,
+  });
+  if (response) {
+    alert(response.data.message);
   }
+  clearForm();
 }
 </script>
 
@@ -110,7 +113,12 @@ async function uploadTak() {
                   <div
                     class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
                   >
-                    <button class="btn btn-primary">Upload</button>
+                    <button type="submit" class="btn btn-primary me-2">
+                      Upload
+                    </button>
+                    <button @click="clearForm" class="btn btn-outline-primary">
+                      Clear
+                    </button>
                   </div>
                 </form>
               </div>

@@ -104,7 +104,9 @@ async function registerMahasiswa() {
               <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Mahasiswa</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      New Mahasiswa
+                    </h5>
                     <button
                       type="button"
                       class="btn-close"
@@ -208,7 +210,10 @@ async function registerMahasiswa() {
                           <div
                             class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
                           >
-                            <button class="btn btn-primary" data-bs-dismiss="modal">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-dismiss="modal"
+                            >
                               Save
                             </button>
                           </div>
@@ -237,6 +242,7 @@ async function registerMahasiswa() {
                     :nim="data.nim"
                     :email="data.email"
                     :name="data.name"
+                    :displayListMahasiswa="displayListMahasiswa"
                   />
                 </tbody>
               </table>

@@ -1,38 +1,53 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive } from "vue";
 import api from "@/api/api";
 
 const props = defineProps({
   id: { type: String, default: "" },
+  image: { type: String, default: "" },
+  mahasiswaNIM: { type: Number, default: 0 },
   name: { type: String, default: "" },
   point_TAK: { type: Number, default: 0 },
   tingkatan: { type: String, default: "" },
   verifed_status: { type: Boolean, default: false },
+  displayTAK: {
+    type: Function,
+    default() {
+      return {};
+    },
+  },
 });
 
-//detail tak
-interface IDetailTAK {
-  id: string;
-  mahasiswaNIM: number;
-  name: string;
-  image: string;
-  tingkatan: string;
-  point_TAK: number;
-  verifed_status: boolean;
-}
-
-const detailDataTAK = ref<IDetailTAK[]>([]);
-
-async function displayDetailTAK() {
+async function getDetailTAK(id: any) {
   const response = await api({
     method: "GET",
-    url: `tak/${props.id}`,
+    url: `/tak/${props.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
   });
   console.log(response.data);
-  detailDataTAK.value = { ...response.data };
+}
+
+//validate TAK
+const dataValidateTAK = reactive({
+  point_TAK: props.point_TAK,
+  verifed_status: props.verifed_status,
+});
+
+async function validateTAK() {
+  dataValidateTAK.verifed_status = true;
+  // await api({
+  //   method: "PATCH",
+  //   url: `/tak/validate/${props.id}`,
+  //   headers: {
+  //     Authorization: localStorage.getItem("token") ?? "",
+  //   },
+  //   data: dataValidateTAK,
+  // });
+  // console.log(dataValidateTAK);
+  console.log(dataValidateTAK);
+  props.displayTAK;
 }
 </script>
 
@@ -59,42 +74,56 @@ async function displayDetailTAK() {
         <div class="modal-body">
           <div class="row">
             <div class="card-body">
-              <form>
-                <div class="row">
-                  <div class="form-floating mb-3 col-md">
-                    <input
-                      disable
-                      class="form-control"
-                      id="inputNIM"
-                      type="number"
-                      placeholder="input nim"
-                    />
-                    <label for="inputNIM">{{ detailDataTAK }}</label>
-                  </div>
-                  <div class="form-floating mb-3 col-md">
-                    <input
-                      class="form-control"
-                      id="inputNama"
-                      type="text"
-                      placeholder="input nama"
-                    />
-                    <label for="inputNIM">Nama</label>
-                  </div>
+              <form @submit.prevent="validateTAK()">
+                <div class="form-floating mb-3">
+                  <input
+                    disabled
+                    class="form-control"
+                    id="inputNIM"
+                    type="text"
+                    placeholder="input nim"
+                    v-model="mahasiswaNIM"
+                  />
+                  <label for="inputNIM">NIM</label>
                 </div>
-                <div class="row">
-                  <div class="form-floating mb-3">
-                    <input
-                      class="form-control"
-                      id="inputEmail"
-                      type="text"
-                      placeholder="input email"
-                    />
-                    <label for="inputEmail">Email</label>
-                  </div>
+                <div class="form-floating mb-3">
+                  <input
+                    disabled
+                    class="form-control"
+                    id="inputNama"
+                    type="text"
+                    placeholder="input nama"
+                    :value="name"
+                  />
+                  <label for="inputNIM">Nama Kegiatan</label>
                 </div>
-
-                <div class="d-flex align-items-center justify-content-md-end mt-4 mb-0">
-                  <button class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                <div class="form-floating mb-3">
+                  <input
+                    class="form-control"
+                    id="inputTingkatan"
+                    type="text"
+                    placeholder="input email"
+                    :value="tingkatan"
+                  />
+                  <label for="inputEmail">Tingkatan</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    class="form-control"
+                    id="inputPass"
+                    type="number"
+                    placeholder="input nim"
+                    v-model="dataValidateTAK.point_TAK"
+                  />
+                  <label for="inputPass">Point TAK</label>
+                </div>
+                <img :src="image" class="rounded mx-auto d-block" :alt="name" />
+                <div
+                  class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
+                >
+                  <button class="btn btn-primary" data-bs-dismiss="modal">
+                    Validate
+                  </button>
                 </div>
               </form>
             </div>
@@ -103,7 +132,7 @@ async function displayDetailTAK() {
       </div>
     </div>
   </div>
-  <tr>
+  <tr :id="id">
     <th>1</th>
     <td>{{ name }}</td>
     <td>{{ point_TAK }}</td>
@@ -111,11 +140,11 @@ async function displayDetailTAK() {
     <td>{{ verifed_status }}</td>
     <td>
       <button
-        @click="displayDetailTAK"
         data-bs-toggle="modal"
         data-bs-target="#viewDetail"
         type="button"
         class="btn btn-dark btn-sm"
+        @click="getDetailTAK(id)"
       >
         <i class="txt-white fas fa-eye"></i>
       </button>

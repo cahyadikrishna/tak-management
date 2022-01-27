@@ -61,10 +61,13 @@ displayTAK();
                   <TableValidasiTAK
                     v-for="data in validasiTAK"
                     :id="data.id"
+                    :image="data.image"
+                    :mahasiswaNIM="data.mahasiswaNIM"
                     :name="data.name"
                     :point_TAK="data.point_TAK"
                     :tingkatan="data.tingkatan"
                     :verifed_status="data.verifed_status"
+                    :displayTAK="displayTAK"
                   />
                 </tbody>
               </table>

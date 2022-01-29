@@ -3,6 +3,7 @@ import { reactive } from "vue";
 import api from "@/api/api";
 
 const props = defineProps({
+  index: { type: Number, default: 0 },
   id: { type: String, default: "" },
   image: { type: String, default: "" },
   mahasiswaNIM: { type: Number, default: 0 },
@@ -20,25 +21,26 @@ const props = defineProps({
 
 //validate TAK
 const dataValidateTAK = reactive({
-  point_TAK: props.point_TAK,
-  verifed_status: props.verifed_status,
+  pointTAK: props.point_TAK,
 });
 
 async function validateTAK() {
-  dataValidateTAK.verifed_status = true;
-  console.log(props.id);
   const response = await api({
     method: "PATCH",
     url: `/tak/validate/${props.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
-    data: { ...dataValidateTAK },
+    data: {
+      pointTak: dataValidateTAK.pointTAK,
+      status: true,
+    },
   });
-  console.log(dataValidateTAK);
-  console.log(response.data.message);
+  if (response) {
+    alert(response.data.message);
+  }
+  props.displayTAK();
 }
-props.displayTAK;
 </script>
 
 <template>
@@ -102,11 +104,12 @@ props.displayTAK;
                     id="inputPass"
                     type="number"
                     placeholder="input nim"
-                    v-model="dataValidateTAK.point_TAK"
+                    v-model="dataValidateTAK.pointTAK"
                   />
                   <label for="inputPass">Point TAK</label>
                 </div>
-                <img :src="image" class="rounded mx-auto d-block" :alt="name" />
+                <label class="mb-2" for="inputDoc">Gambar</label>
+                <img :src="image" class="img-fluid" :alt="name" />
                 <div
                   class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
                 >
@@ -122,7 +125,7 @@ props.displayTAK;
     </div>
   </div>
   <tr>
-    <th>1</th>
+    <th>{{ index + 1 }}</th>
     <td>{{ name }}</td>
     <td>{{ point_TAK }}</td>
     <td>{{ tingkatan }}</td>

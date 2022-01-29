@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import Nav from "@/components/Nav.vue";
 import SideNav from "@/components/SideNav.vue";
 import Footer from "@/components/Footer.vue";
@@ -68,8 +68,6 @@ async function uploadTak() {
             <ol class="breadcrumb mb-4">
               <li class="breadcrumb-item active">uploadtak</li>
             </ol>
-
-            <!-- modal -->
             <div class="row">
               <div class="card-body">
                 <form @submit.prevent="uploadTak" enctype="multipart/form-data">

@@ -18,17 +18,6 @@ const props = defineProps({
   },
 });
 
-async function getDetailTAK(id: any) {
-  const response = await api({
-    method: "GET",
-    url: `/tak/${props.id}`,
-    headers: {
-      Authorization: localStorage.getItem("token") ?? "",
-    },
-  });
-  console.log(response.data);
-}
-
 //validate TAK
 const dataValidateTAK = reactive({
   point_TAK: props.point_TAK,
@@ -37,33 +26,33 @@ const dataValidateTAK = reactive({
 
 async function validateTAK() {
   dataValidateTAK.verifed_status = true;
-  // await api({
-  //   method: "PATCH",
-  //   url: `/tak/validate/${props.id}`,
-  //   headers: {
-  //     Authorization: localStorage.getItem("token") ?? "",
-  //   },
-  //   data: dataValidateTAK,
-  // });
-  // console.log(dataValidateTAK);
+  console.log(props.id);
+  const response = await api({
+    method: "PATCH",
+    url: `/tak/validate/${props.id}`,
+    headers: {
+      Authorization: localStorage.getItem("token") ?? "",
+    },
+    data: { ...dataValidateTAK },
+  });
   console.log(dataValidateTAK);
-  props.displayTAK;
+  console.log(response.data.message);
 }
+props.displayTAK;
 </script>
 
 <template>
-  <!-- modal -->
   <div
     class="modal fade"
-    id="viewDetail"
+    :id="`viewDetail-${id}`"
     tabindex="-1"
-    aria-labelledby="exampleModalLabel"
+    aria-labelledby="detailTAKModal"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Detail TAK</h5>
+          <h5 class="modal-title" id="detailTAKModal">Detail TAK</h5>
           <button
             type="button"
             class="btn-close"
@@ -74,7 +63,7 @@ async function validateTAK() {
         <div class="modal-body">
           <div class="row">
             <div class="card-body">
-              <form @submit.prevent="validateTAK()">
+              <form @submit.prevent="validateTAK">
                 <div class="form-floating mb-3">
                   <input
                     disabled
@@ -93,7 +82,7 @@ async function validateTAK() {
                     id="inputNama"
                     type="text"
                     placeholder="input nama"
-                    :value="name"
+                    v-model="name"
                   />
                   <label for="inputNIM">Nama Kegiatan</label>
                 </div>
@@ -103,7 +92,7 @@ async function validateTAK() {
                     id="inputTingkatan"
                     type="text"
                     placeholder="input email"
-                    :value="tingkatan"
+                    v-model="tingkatan"
                   />
                   <label for="inputEmail">Tingkatan</label>
                 </div>
@@ -132,7 +121,7 @@ async function validateTAK() {
       </div>
     </div>
   </div>
-  <tr :id="id">
+  <tr>
     <th>1</th>
     <td>{{ name }}</td>
     <td>{{ point_TAK }}</td>
@@ -141,10 +130,9 @@ async function validateTAK() {
     <td>
       <button
         data-bs-toggle="modal"
-        data-bs-target="#viewDetail"
+        :data-bs-target="`#viewDetail-${id}`"
         type="button"
         class="btn btn-dark btn-sm"
-        @click="getDetailTAK(id)"
       >
         <i class="txt-white fas fa-eye"></i>
       </button>

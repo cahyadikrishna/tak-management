@@ -4,6 +4,7 @@ import Nav from "@/components/Nav.vue";
 import SideNav from "@/components/SideNav.vue";
 import Footer from "@/components/Footer.vue";
 import TableValidasiTAK from "@/views/content/widgets/tables/TableValidasiTAK.vue";
+
 import api from "@/api/api";
 
 interface IValidasiTAK {

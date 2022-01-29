@@ -9,7 +9,6 @@ import UploadTAK from "@/views/pages/kmhs/UploadTAK.vue";
 import ListTAK from "@/views/pages/kmhs/ListTAK.vue";
 import ManageMahasiswa from "@/views/pages/kmhs/ManageMahasiswa.vue";
 import ManageAdmin from "@/views/pages/kmhs/ManageAdmin.vue";
-import DetailMahasiswa from "@/views/pages/kmhs/DetailMahasiswa.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -50,13 +49,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "/listmahasiswa",
         name: "listmahasiswa",
         component: ManageMahasiswa,
-        children: [
-          {
-            path: "/detailmhs/:nim",
-            name: "detailmhs",
-            component: DetailMahasiswa,
-          },
-        ],
       },
     ],
   },

@@ -27,7 +27,7 @@ async function displayTAK() {
       Authorization: localStorage.getItem("token") ?? "",
     },
   });
-  validasiTAK.value = { ...response.data };
+  validasiTAK.value = response.data;
 }
 displayTAK();
 </script>
@@ -60,7 +60,8 @@ displayTAK();
                 </thead>
                 <tbody>
                   <TableValidasiTAK
-                    v-for="data in validasiTAK"
+                    v-for="(data, index) in validasiTAK"
+                    :index="index"
                     :id="data.id"
                     :image="data.image"
                     :mahasiswaNIM="data.mahasiswaNIM"

@@ -22,12 +22,12 @@ const listDataTAK = ref<IListTAK[]>([]);
 async function displayListTAK() {
   const response = await api({
     method: "GET",
-    url: `mahasiswa/${localStorage.getItem("nim")}`,
+    url: `/mahasiswa/${localStorage.getItem("nim")}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
   });
-  listDataTAK.value = { ...response.data.tak };
+  listDataTAK.value = response.data.tak;
 }
 displayListTAK();
 </script>
@@ -61,9 +61,11 @@ displayListTAK();
                 </thead>
                 <tbody>
                   <TableListTAK
-                    v-for="data in listDataTAK"
+                    v-for="(data, index) in listDataTAK"
+                    :index="index"
                     :id="data.id"
                     :name="data.name"
+                    :image="data.image"
                     :tingkatan="data.tingkatan"
                     :point_TAK="data.point_TAK"
                     :verifed_status="data.verifed_status"

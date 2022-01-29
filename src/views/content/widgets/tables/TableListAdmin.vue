@@ -2,7 +2,8 @@
 import api from "@/api/api";
 
 const props = defineProps({
-  nidn: { type: Number, default: "" },
+  index: { type: Number, default: 0 },
+  nidn: { type: Number, default: 0 },
   name: { type: String, default: "" },
   email: { type: String, default: "" },
   displayListAdmin: {
@@ -13,7 +14,7 @@ const props = defineProps({
   },
 });
 
-async function deleteAdmin(nidn: any) {
+async function deleteAdmin() {
   const response = await api({
     method: "DELETE",
     url: `admin/${props.nidn}`,
@@ -29,8 +30,8 @@ async function deleteAdmin(nidn: any) {
 </script>
 
 <template>
-  <tr id="{{nidn}}">
-    <th>1</th>
+  <tr>
+    <th>{{ index + 1 }}</th>
     <td>{{ nidn }}</td>
     <td>{{ name }}</td>
     <td>{{ email }}</td>
@@ -42,7 +43,7 @@ async function deleteAdmin(nidn: any) {
       <button
         type="button"
         class="btn btn-danger btn-sm"
-        @click="deleteAdmin(nidn)"
+        @click="deleteAdmin()"
       >
         <i class="txt-white fas fa-trash"></i>
       </button>

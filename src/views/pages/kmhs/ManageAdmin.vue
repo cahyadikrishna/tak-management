@@ -157,7 +157,8 @@ displayListAdmin();
                 </thead>
                 <tbody>
                   <TableListAdmin
-                    v-for="data in listAdmin"
+                    v-for="(data, index) in listAdmin"
+                    :index="index"
                     :nidn="data.nidn"
                     :name="data.name"
                     :email="data.email"

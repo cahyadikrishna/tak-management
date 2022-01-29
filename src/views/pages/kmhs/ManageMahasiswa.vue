@@ -224,7 +224,6 @@ async function registerMahasiswa() {
                 </div>
               </div>
             </div>
-
             <div class="card mb-4">
               <table class="table">
                 <thead>
@@ -238,7 +237,8 @@ async function registerMahasiswa() {
                 </thead>
                 <tbody>
                   <TableListMahasiswa
-                    v-for="data in listMahasiswa"
+                    v-for="(data, index) in listMahasiswa"
+                    :index="index"
                     :nim="data.nim"
                     :email="data.email"
                     :name="data.name"

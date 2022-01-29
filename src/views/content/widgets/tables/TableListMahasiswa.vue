@@ -2,6 +2,7 @@
 import api from "@/api/api";
 
 const props = defineProps({
+  index: { type: Number, default: 0 },
   nim: { type: Number, default: "" },
   email: { type: String, default: "" },
   name: { type: String, default: "" },
@@ -14,10 +15,10 @@ const props = defineProps({
 });
 
 //delete mahasiswa
-async function deleteMahasiswa(nim: any) {
+async function deleteMahasiswa() {
   const response = await api({
     method: "DELETE",
-    url: `mahasiswa/${props.nim}`,
+    url: `/mahasiswa/${props.nim}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
@@ -31,7 +32,7 @@ async function deleteMahasiswa(nim: any) {
 
 <template>
   <tr>
-    <th>1</th>
+    <th>{{ index + 1 }}</th>
     <td>{{ nim }}</td>
     <td>{{ name }}</td>
     <td>{{ email }}</td>

@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { reactive } from "vue";
 import api from "@/api/api";
 
 const props = defineProps({
+  index: { type: Number, default: 0 },
   id: { type: String, default: "" },
   name: { type: String, default: "" },
+  image: { type: String, default: "" },
   tingkatan: { type: String, default: "" },
   point_TAK: { type: Number, default: 0 },
   verifed_status: { type: Boolean, default: false },
@@ -15,11 +18,41 @@ const props = defineProps({
   },
 });
 
+// edit TAK
+const editedTAK = reactive({
+  name: props.name,
+  tingkatan: props.tingkatan,
+});
+
+const options = reactive({
+  tingkatanOptions: [
+    { text: "Provinsi", value: "PROVINSI" },
+    { text: "Kota", value: "KOTA" },
+    { text: "Nasional", value: "NASIONAL" },
+    { text: "International", value: "INTANSIONAl" },
+  ],
+});
+
+async function editTAK() {
+  const response = await api({
+    method: "PATCH",
+    url: `/tak/${props.id}`,
+    headers: {
+      Authorization: localStorage.getItem("token") ?? "",
+    },
+    data: { ...editedTAK },
+  });
+  if (response) {
+    alert(response.data.message);
+  }
+  props.displayListTAK();
+}
+
 //delete TAK
 async function deleteTAK(id: any) {
   const response = await api({
     method: "DELETE",
-    url: `tak/${props.id}`,
+    url: `/tak/${props.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
@@ -35,15 +68,15 @@ async function deleteTAK(id: any) {
   <!-- modal -->
   <div
     class="modal fade"
-    id="viewTAK"
+    :id="`viewEdit-${id}`"
     tabindex="-1"
-    aria-labelledby="exampleModalLabel"
+    aria-labelledby="detailTAKModal"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Detail TAK</h5>
+          <h5 class="modal-title" id="detailTAKModal">Edit TAK</h5>
           <button
             type="button"
             class="btn-close"
@@ -54,62 +87,57 @@ async function deleteTAK(id: any) {
         <div class="modal-body">
           <div class="row">
             <div class="card-body">
-              <form @submit.prevent="">
+              <form @submit.prevent="editTAK">
                 <div class="form-floating mb-3">
                   <input
                     class="form-control"
-                    id="inputNIM"
-                    type="text"
-                    placeholder="input nim"
-                  />
-                  <label for="inputNIM">NIM</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input
-                    class="form-control"
-                    id="inputNama"
+                    id="inputName"
                     type="text"
                     placeholder="input nama"
+                    v-model="editedTAK.name"
                   />
-                  <label for="inputNIM">Nama</label>
-                </div>
-                <!-- <div class="form-floating mb-3">
-                            <Datepicker
-                              v-model="dataRegisterMahasiswa.birthDate"
-                            ></Datepicker>
-                          </div> -->
-                <div class="form-floating mb-3">
-                  <input
-                    class="form-control"
-                    id="inputEmail"
-                    type="text"
-                    placeholder="input email"
-                  />
-                  <label for="inputEmail">Email</label>
+                  <label for="inputName">Nama Kegiatan</label>
                 </div>
                 <div class="form-floating mb-3">
+                  <select
+                    id="inputTk"
+                    class="form-select"
+                    aria-label="Default select example"
+                    v-model="editedTAK.tingkatan"
+                  >
+                    <option disabled value="">Pilih</option>
+                    <option
+                      v-for="option in options.tingkatanOptions"
+                      :value="option.value"
+                    >
+                      {{ option.text }}
+                    </option>
+                  </select>
+                  <label for="inputTk">Pilih Tingkatan</label>
+                </div>
+                <div class="form-floating mb-3">
                   <input
+                    disabled
                     class="form-control"
-                    id="inputAkt"
+                    id="inputPoint"
                     type="number"
-                    placeholder="input angkatan"
-                  />
-                  <label for="inputAkt">Angkatan</label>
-                </div>
-
-                <div class="form-floating mb-3">
-                  <input
-                    class="form-control"
-                    id="inputPass"
-                    type="text"
                     placeholder="input nim"
+                    v-model="point_TAK"
                   />
-                  <label for="inputPass">Password</label>
+                  <label for="inputPoint">Point TAK</label>
                 </div>
+                <label class="mb-2" for="img">Gambar</label>
+                <img id="img" :src="image" class="img-fluid" :alt="name" />
                 <div
                   class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
                 >
-                  <button class="btn btn-primary">Save</button>
+                  <button
+                    v-if="verifed_status === false"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                  >
+                    Edit
+                  </button>
                 </div>
               </form>
             </div>
@@ -118,8 +146,8 @@ async function deleteTAK(id: any) {
       </div>
     </div>
   </div>
-  <tr id="{{id}}">
-    <th>1</th>
+  <tr>
+    <th>{{ index + 1 }}</th>
     <td>{{ name }}</td>
     <td>{{ tingkatan }}</td>
     <td>{{ point_TAK }}</td>
@@ -127,10 +155,9 @@ async function deleteTAK(id: any) {
     <td>
       <button
         data-bs-toggle="modal"
-        data-bs-target="#viewTAK"
+        :data-bs-target="`#viewEdit-${id}`"
         type="button"
         class="btn btn-warning btn-sm me-2"
-        @click=""
       >
         <i style="color: white" class="fas fa-pencil-alt"></i>
       </button>

@@ -9,8 +9,12 @@ import api from "@/api/api";
 
 interface IListMahasiswa {
   nim: number;
-  email: string;
   name: string;
+  email: string;
+  angkatan: number;
+  gender: string;
+  prodi: string;
+  birth_date: string;
 }
 
 const listMahasiswa = ref<IListMahasiswa[]>([]);
@@ -56,8 +60,6 @@ async function registerMahasiswa() {
     method: "POST",
     url: "/mahasiswa/register",
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
       Authorization: localStorage.getItem("token") ?? "",
     },
     data: { ...dataRegisterMahasiswa },
@@ -240,8 +242,12 @@ async function registerMahasiswa() {
                     v-for="(data, index) in listMahasiswa"
                     :index="index"
                     :nim="data.nim"
-                    :email="data.email"
                     :name="data.name"
+                    :email="data.email"
+                    :angkatan="data.angkatan"
+                    :gender="data.gender"
+                    :prodi="data.prodi"
+                    :birth_date="data.birth_date"
                     :displayListMahasiswa="displayListMahasiswa"
                   />
                 </tbody>

@@ -29,7 +29,7 @@ const options = reactive({
     { text: "Provinsi", value: "PROVINSI" },
     { text: "Kota", value: "KOTA" },
     { text: "Nasional", value: "NASIONAL" },
-    { text: "International", value: "INTANSIONAl" },
+    { text: "International", value: "INTERNATIONAL" },
   ],
 });
 

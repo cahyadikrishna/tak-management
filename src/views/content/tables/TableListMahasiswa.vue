@@ -1,28 +1,33 @@
 <script setup lang="ts">
+import { PropType } from "vue";
 import api from "@/api/api";
+
+interface IListMahasiswa {
+  nim: number;
+  name: string;
+  email: string;
+  angkatan: number;
+  gender: string;
+  prodi: string;
+  birth_date: string;
+}
 
 const props = defineProps({
   index: { type: Number, default: 0 },
-  nim: { type: Number, default: 0 },
-  name: { type: String, default: "" },
-  email: { type: String, default: "" },
-  angkatan: { type: Number, default: 0 },
-  gender: { type: String, default: "" },
-  prodi: { type: String, default: "" },
-  birth_date: { type: String, default: "" },
   displayListMahasiswa: {
     type: Function,
     default() {
       return {};
     },
   },
+  dataMahasiswa: { type: Object as PropType<IListMahasiswa>, default: null },
 });
 
 //delete mahasiswa
 async function deleteMahasiswa() {
   const response = await api({
     method: "DELETE",
-    url: `/mahasiswa/${props.nim}`,
+    url: `/mahasiswa/${props.dataMahasiswa.nim}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
@@ -38,7 +43,7 @@ async function deleteMahasiswa() {
   <!-- modal detail mahasiswa -->
   <div
     class="modal fade"
-    :id="`detailMahasiswa-${nim}`"
+    :id="`detailMahasiswa-${dataMahasiswa.nim}`"
     tabindex="-1"
     aria-labelledby="detailMahasiswa"
     aria-hidden="true"
@@ -65,7 +70,7 @@ async function deleteMahasiswa() {
                     id="inputNIM"
                     type="number"
                     placeholder="input nim"
-                    v-model="nim"
+                    v-model="dataMahasiswa.nim"
                   />
                   <label for="inputNIM">NIM</label>
                 </div>
@@ -76,7 +81,7 @@ async function deleteMahasiswa() {
                     id="inputNama"
                     type="text"
                     placeholder="input nama"
-                    v-model="name"
+                    v-model="dataMahasiswa.name"
                   />
                   <label for="inputNIM">Nama</label>
                 </div>
@@ -87,7 +92,7 @@ async function deleteMahasiswa() {
                     id="inputDate"
                     type="text"
                     placeholder="input nim"
-                    v-model="birth_date"
+                    v-model="dataMahasiswa.birth_date"
                   />
                   <label for="inputDate">Tanggal Lahir</label>
                 </div>
@@ -98,7 +103,7 @@ async function deleteMahasiswa() {
                     id="inputEmail"
                     type="text"
                     placeholder="input email"
-                    v-model="email"
+                    v-model="dataMahasiswa.email"
                   />
                   <label for="inputEmail">Email</label>
                 </div>
@@ -109,7 +114,7 @@ async function deleteMahasiswa() {
                     id="inputAkt"
                     type="number"
                     placeholder="input angkatan"
-                    v-model="angkatan"
+                    v-model="dataMahasiswa.angkatan"
                   />
                   <label for="inputAkt">Angkatan</label>
                 </div>
@@ -120,7 +125,7 @@ async function deleteMahasiswa() {
                     id="inputGen"
                     type="text"
                     placeholder="input email"
-                    v-model="gender"
+                    v-model="dataMahasiswa.gender"
                   />
                   <label for="inputGen">Jenis Kelamin</label>
                 </div>
@@ -131,7 +136,7 @@ async function deleteMahasiswa() {
                     id="inputGen"
                     type="text"
                     placeholder="input email"
-                    v-model="prodi"
+                    v-model="dataMahasiswa.prodi"
                   />
                   <label for="inputGen">Prodi</label>
                 </div>
@@ -144,13 +149,13 @@ async function deleteMahasiswa() {
   </div>
   <tr>
     <th>{{ index + 1 }}</th>
-    <td>{{ nim }}</td>
-    <td>{{ name }}</td>
-    <td>{{ email }}</td>
+    <td>{{ dataMahasiswa.nim }}</td>
+    <td>{{ dataMahasiswa.name }}</td>
+    <td>{{ dataMahasiswa.email }}</td>
     <td>
       <button
         data-bs-toggle="modal"
-        :data-bs-target="`#detailMahasiswa-${nim}`"
+        :data-bs-target="`#detailMahasiswa-${dataMahasiswa.nim}`"
         type="button"
         class="btn btn-dark btn-sm me-2"
       >

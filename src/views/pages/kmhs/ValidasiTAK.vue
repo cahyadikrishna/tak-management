@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Nav from "@/components/Nav.vue";
-import SideNav from "@/components/SideNav.vue";
-import Footer from "@/components/Footer.vue";
-import TableValidasiTAK from "@/views/content/widgets/tables/TableValidasiTAK.vue";
+import TableValidasiTAK from "@/views/content/tables/TableValidasiTAK.vue";
 
 import api from "@/api/api";
 
@@ -33,51 +30,40 @@ displayTAK();
 </script>
 
 <template>
-  <div class="sb-nav-fixed">
-    <Nav />
-    <div id="layoutSidenav">
-      <div id="layoutSidenav_nav">
-        <SideNav />
-      </div>
-      <div id="layoutSidenav_content">
-        <main>
-          <div class="container-fluid px-4">
-            <h1 class="mt-4">Validasi TAK</h1>
-            <ol class="breadcrumb mb-4">
-              <li class="breadcrumb-item active">validasitak</li>
-            </ol>
-            <div class="card mb-4">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Nama Kegiatan</th>
-                    <th scope="col">Poin TAK</th>
-                    <th scope="col">Tingkatan</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <TableValidasiTAK
-                    v-for="(data, index) in validasiTAK"
-                    :index="index"
-                    :id="data.id"
-                    :image="data.image"
-                    :mahasiswaNIM="data.mahasiswaNIM"
-                    :name="data.name"
-                    :point_TAK="data.point_TAK"
-                    :tingkatan="data.tingkatan"
-                    :verifed_status="data.verifed_status"
-                    :displayTAK="displayTAK"
-                  />
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </main>
-        <Footer />
+  <main>
+    <div class="container-fluid px-4">
+      <h1 class="mt-4">Validasi TAK</h1>
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">validasitak</li>
+      </ol>
+      <div class="card mb-4">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Nama Kegiatan</th>
+              <th scope="col">Poin TAK</th>
+              <th scope="col">Tingkatan</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <TableValidasiTAK
+              v-for="(data, index) in validasiTAK"
+              :index="index"
+              :id="data.id"
+              :image="data.image"
+              :mahasiswaNIM="data.mahasiswaNIM"
+              :name="data.name"
+              :point_TAK="data.point_TAK"
+              :tingkatan="data.tingkatan"
+              :verifed_status="data.verifed_status"
+              :displayTAK="displayTAK"
+            />
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
+  </main>
 </template>

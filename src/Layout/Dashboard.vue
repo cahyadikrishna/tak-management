@@ -2,7 +2,6 @@
 import Nav from "@/components/Nav.vue";
 import SideNav from "@/components/SideNav.vue";
 import Footer from "@/components/Footer.vue";
-import Home from "@/views/pages/kmhs/Home.vue";
 </script>
 
 <template>

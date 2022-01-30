@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import api from "@/api/api";
+import api from "@/api/api2";
 
 const router = useRouter();
 
@@ -13,28 +13,43 @@ const loginData = reactive({
 const emit = defineEmits(["loadingStatus"]);
 
 async function handleLogin() {
-  emit("loadingStatus", true);
-  const response = await api({
-    method: "POST",
-    url: "/admin/login",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token") ?? "",
-    },
-    data: JSON.stringify(loginData),
-  });
+  try {
+    emit("loadingStatus", true);
+    // const response = await api({
+    //   method: "POST",
+    //   url: "/admin/login",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //     Authorization: localStorage.getItem("token") ?? "",
+    //   },
+    //   data: JSON.stringify(loginData),
+    // });
 
-  if (response.data.token) {
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("name", response.data.name);
-    localStorage.setItem("role", response.data.role);
-    //redirect to dashboard page
-    router.push("/dashboard");
-  } else {
-    alert("Your data not Valid");
+    const response = await api("/admin/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token") ?? "",
+      },
+      body: { ...loginData },
+    });
+
+    if (response.token) {
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("name", response.name);
+      localStorage.setItem("role", response.role);
+      //redirect to dashboard page
+      router.push("/dashboard");
+    } else {
+      alert("Your data not Valid");
+    }
+    emit("loadingStatus", false);
+  } catch (error: any) {
+    emit("loadingStatus", false);
+    console.log(error, error.data);
   }
-  emit("loadingStatus", false);
 }
 </script>
 
@@ -47,7 +62,9 @@ async function handleLogin() {
             <div class="col-lg-5">
               <div class="card shadow-lg border-0 rounded-lg mt-5">
                 <div class="card-header">
-                  <h3 class="text-center font-weight-light my-2">Login TAK Management</h3>
+                  <h3 class="text-center font-weight-light my-2">
+                    Login TAK Management
+                  </h3>
                 </div>
                 <div class="card-body">
                   <form @submit.prevent="handleLogin">

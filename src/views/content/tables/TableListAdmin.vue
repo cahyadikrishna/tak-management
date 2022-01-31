@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { PropType } from "vue";
+import { IAdminData } from "@/interfaces/Admin";
 import api from "@/api/api";
 
 const props = defineProps({
   index: { type: Number, default: 0 },
-  nidn: { type: Number, default: 0 },
-  name: { type: String, default: "" },
-  email: { type: String, default: "" },
+  dataAdmin: { type: Object as PropType<IAdminData>, default: null },
   displayListAdmin: {
     type: Function,
     default() {
@@ -17,7 +17,7 @@ const props = defineProps({
 async function deleteAdmin() {
   const response = await api({
     method: "DELETE",
-    url: `admin/${props.nidn}`,
+    url: `admin/${props.dataAdmin.nidn}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
@@ -32,14 +32,13 @@ async function deleteAdmin() {
 <template>
   <tr>
     <th>{{ index + 1 }}</th>
-    <td>{{ nidn }}</td>
-    <td>{{ name }}</td>
-    <td>{{ email }}</td>
+    <td>{{ dataAdmin.nidn }}</td>
+    <td>{{ dataAdmin.name }}</td>
+    <td>{{ dataAdmin.email }}</td>
     <td>
-      <button type="button" class="btn btn-warning btn-sm">
+      <button type="button" class="btn btn-warning btn-sm me-2">
         <i style="color: white" class="fas fa-pencil-alt"></i>
       </button>
-      &nbsp
       <button
         type="button"
         class="btn btn-danger btn-sm"

@@ -1,20 +1,10 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import { IMahasiswaData } from "@/interfaces/Mahasiswa";
 import TableListMahasiswa from "@/views/content/tables/TableListMahasiswa.vue";
-
 import api from "@/api/api";
 
-interface IListMahasiswa {
-  nim: number;
-  name: string;
-  email: string;
-  angkatan: number;
-  gender: string;
-  prodi: string;
-  birth_date: string;
-}
-
-const listMahasiswa = ref<IListMahasiswa[]>([]);
+const listMahasiswa = ref<IMahasiswaData[]>([]);
 
 async function displayListMahasiswa() {
   const response = await api({
@@ -40,7 +30,7 @@ const dataRegisterMahasiswa = reactive({
   birthDate: "",
 });
 
-const options = reactive({
+const options = {
   genOptions: [
     { text: "Laki - laki", value: "PRIA" },
     { text: "Perempuan", value: "WANITA" },
@@ -50,7 +40,7 @@ const options = reactive({
     { text: "Sistem Informasi Akutansi", value: "SIA" },
     { text: "Informatika", value: "IF" },
   ],
-});
+};
 
 async function registerMahasiswa() {
   await api({

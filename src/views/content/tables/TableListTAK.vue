@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, PropType } from "vue";
+import { IDataTAK } from "@/interfaces/TAK";
 import api from "@/api/api";
 
 const props = defineProps({
   index: { type: Number, default: 0 },
-  id: { type: String, default: "" },
-  name: { type: String, default: "" },
-  image: { type: String, default: "" },
-  tingkatan: { type: String, default: "" },
-  point_TAK: { type: Number, default: 0 },
-  verifed_status: { type: Boolean, default: false },
+  dataTAK: { type: Object as PropType<IDataTAK>, default: null },
   displayListTAK: {
     type: Function,
     default() {
@@ -20,23 +16,23 @@ const props = defineProps({
 
 // edit TAK
 const editedTAK = reactive({
-  name: props.name,
-  tingkatan: props.tingkatan,
+  name: props.dataTAK.name,
+  tingkatan: props.dataTAK.tingkatan,
 });
 
-const options = reactive({
+const options = {
   tingkatanOptions: [
     { text: "Provinsi", value: "PROVINSI" },
     { text: "Kota", value: "KOTA" },
     { text: "Nasional", value: "NASIONAL" },
     { text: "International", value: "INTERNASIONAL" },
   ],
-});
+};
 
 async function editTAK() {
   const response = await api({
     method: "PATCH",
-    url: `/tak/${props.id}`,
+    url: `/tak/${props.dataTAK.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
@@ -49,10 +45,10 @@ async function editTAK() {
 }
 
 //delete TAK
-async function deleteTAK(id: any) {
+async function deleteTAK() {
   const response = await api({
     method: "DELETE",
-    url: `/tak/${props.id}`,
+    url: `/tak/${props.dataTAK.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
@@ -68,7 +64,7 @@ async function deleteTAK(id: any) {
   <!-- modal -->
   <div
     class="modal fade"
-    :id="`viewEdit-${id}`"
+    :id="`viewEdit-${dataTAK.id}`"
     tabindex="-1"
     aria-labelledby="detailTAKModal"
     aria-hidden="true"
@@ -122,17 +118,22 @@ async function deleteTAK(id: any) {
                     id="inputPoint"
                     type="number"
                     placeholder="input nim"
-                    v-model="point_TAK"
+                    v-model="dataTAK.point_TAK"
                   />
                   <label for="inputPoint">Point TAK</label>
                 </div>
                 <label class="mb-2" for="img">Gambar</label>
-                <img id="img" :src="image" class="img-fluid" :alt="name" />
+                <img
+                  id="img"
+                  :src="dataTAK.image"
+                  class="img-fluid"
+                  :alt="dataTAK.name"
+                />
                 <div
                   class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
                 >
                   <button
-                    v-if="verifed_status === false"
+                    v-if="dataTAK.verifed_status === false"
                     class="btn btn-primary"
                     data-bs-dismiss="modal"
                   >
@@ -148,24 +149,24 @@ async function deleteTAK(id: any) {
   </div>
   <tr>
     <th>{{ index + 1 }}</th>
-    <td>{{ name }}</td>
-    <td>{{ tingkatan }}</td>
-    <td>{{ point_TAK }}</td>
-    <td>{{ verifed_status }}</td>
+    <td>{{ dataTAK.name }}</td>
+    <td>{{ dataTAK.tingkatan }}</td>
+    <td>{{ dataTAK.point_TAK }}</td>
+    <td>{{ dataTAK.verifed_status }}</td>
     <td>
       <button
         data-bs-toggle="modal"
-        :data-bs-target="`#viewEdit-${id}`"
+        :data-bs-target="`#viewEdit-${dataTAK.id}`"
         type="button"
         class="btn btn-warning btn-sm me-2"
       >
         <i style="color: white" class="fas fa-pencil-alt"></i>
       </button>
       <button
-        v-if="props.verifed_status === false"
+        v-if="dataTAK.verifed_status === false"
         type="button"
         class="btn btn-danger btn-sm"
-        @click="deleteTAK(id)"
+        @click="deleteTAK()"
       >
         <i class="txt-white fas fa-trash"></i>
       </button>

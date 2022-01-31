@@ -1,26 +1,17 @@
 <script setup lang="ts">
 import { PropType } from "vue";
+import { IMahasiswaData } from "@/interfaces/Mahasiswa";
 import api from "@/api/api";
-
-interface IListMahasiswa {
-  nim: number;
-  name: string;
-  email: string;
-  angkatan: number;
-  gender: string;
-  prodi: string;
-  birth_date: string;
-}
 
 const props = defineProps({
   index: { type: Number, default: 0 },
+  dataMahasiswa: { type: Object as PropType<IMahasiswaData>, default: null },
   displayListMahasiswa: {
     type: Function,
     default() {
       return {};
     },
   },
-  dataMahasiswa: { type: Object as PropType<IListMahasiswa>, default: null },
 });
 
 //delete mahasiswa

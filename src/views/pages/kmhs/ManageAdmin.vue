@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { IAdminData } from "@/interfaces/Admin";
 import TableListAdmin from "@/views/content/tables/TableListAdmin.vue";
-
 import api from "@/api/api";
 
-interface IListAdmin {
-  nidn: number;
-  name: string;
-  email: string;
-}
-
-const listAdmin = ref<IListAdmin[]>([]);
+const listAdmin = ref<IAdminData[]>([]);
 
 async function displayListAdmin() {
   const response = await api({
@@ -75,7 +69,7 @@ displayListAdmin();
                         type="text"
                         placeholder="input nim"
                       />
-                      <label for="inputNIM">NIM</label>
+                      <label for="inputNIM">NIDN</label>
                     </div>
                     <div class="form-floating mb-3">
                       <input
@@ -86,11 +80,6 @@ displayListAdmin();
                       />
                       <label for="inputNIM">Nama</label>
                     </div>
-                    <!-- <div class="form-floating mb-3">
-                            <Datepicker
-                              v-model="dataRegisterMahasiswa.birthDate"
-                            ></Datepicker>
-                          </div> -->
                     <div class="form-floating mb-3">
                       <input
                         class="form-control"
@@ -103,16 +92,6 @@ displayListAdmin();
                     <div class="form-floating mb-3">
                       <input
                         class="form-control"
-                        id="inputAkt"
-                        type="number"
-                        placeholder="input angkatan"
-                      />
-                      <label for="inputAkt">Angkatan</label>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                      <input
-                        class="form-control"
                         id="inputPass"
                         type="text"
                         placeholder="input nim"
@@ -122,7 +101,7 @@ displayListAdmin();
                     <div
                       class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
                     >
-                      <button class="btn btn-primary">Save</button>
+                      <button class="btn btn-primary">Add</button>
                     </div>
                   </form>
                 </div>
@@ -147,9 +126,7 @@ displayListAdmin();
             <TableListAdmin
               v-for="(data, index) in listAdmin"
               :index="index"
-              :nidn="data.nidn"
-              :name="data.name"
-              :email="data.email"
+              :dataAdmin="data"
               :displayListAdmin="displayListAdmin"
             />
           </tbody>

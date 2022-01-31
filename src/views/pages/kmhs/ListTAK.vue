@@ -1,20 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { IDataTAK } from "@/interfaces/TAK";
 import TableListTAK from "@/views/content/tables/TableListTAK.vue";
-
 import api from "@/api/api";
 
-interface IListTAK {
-  id: string;
-  mahasiswaNIM: number;
-  name: string;
-  image: string;
-  tingkatan: string;
-  point_TAK: number;
-  verifed_status: boolean;
-}
-
-const listDataTAK = ref<IListTAK[]>([]);
+const listDataTAK = ref<IDataTAK[]>([]);
 
 async function displayListTAK() {
   const response = await api({
@@ -53,12 +43,7 @@ displayListTAK();
             <TableListTAK
               v-for="(data, index) in listDataTAK"
               :index="index"
-              :id="data.id"
-              :name="data.name"
-              :image="data.image"
-              :tingkatan="data.tingkatan"
-              :point_TAK="data.point_TAK"
-              :verifed_status="data.verifed_status"
+              :dataTAK="data"
               :displayListTAK="displayListTAK"
             />
           </tbody>

@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, PropType } from "vue";
+import { IDataTAK } from "@/interfaces/TAK";
 import api from "@/api/api";
 
 const props = defineProps({
   index: { type: Number, default: 0 },
-  id: { type: String, default: "" },
-  image: { type: String, default: "" },
-  mahasiswaNIM: { type: Number, default: 0 },
-  name: { type: String, default: "" },
-  point_TAK: { type: Number, default: 0 },
-  tingkatan: { type: String, default: "" },
-  verifed_status: { type: Boolean, default: false },
+  dataTAK: { type: Object as PropType<IDataTAK>, default: null },
   displayTAK: {
     type: Function,
     default() {
@@ -21,13 +16,13 @@ const props = defineProps({
 
 //validate TAK
 const dataValidateTAK = reactive({
-  pointTAK: props.point_TAK,
+  pointTAK: props.dataTAK.point_TAK,
 });
 
 async function validateTAK() {
   const response = await api({
     method: "PATCH",
-    url: `/tak/validate/${props.id}`,
+    url: `/tak/validate/${props.dataTAK.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
@@ -46,7 +41,7 @@ async function validateTAK() {
 <template>
   <div
     class="modal fade"
-    :id="`viewDetail-${id}`"
+    :id="`viewDetail-${dataTAK.id}`"
     tabindex="-1"
     aria-labelledby="detailTAKModal"
     aria-hidden="true"
@@ -73,7 +68,7 @@ async function validateTAK() {
                     id="inputNIM"
                     type="text"
                     placeholder="input nim"
-                    v-model="mahasiswaNIM"
+                    v-model="dataTAK.mahasiswaNIM"
                   />
                   <label for="inputNIM">NIM</label>
                 </div>
@@ -84,7 +79,7 @@ async function validateTAK() {
                     id="inputNama"
                     type="text"
                     placeholder="input nama"
-                    v-model="name"
+                    v-model="dataTAK.name"
                   />
                   <label for="inputNIM">Nama Kegiatan</label>
                 </div>
@@ -94,7 +89,7 @@ async function validateTAK() {
                     id="inputTingkatan"
                     type="text"
                     placeholder="input email"
-                    v-model="tingkatan"
+                    v-model="dataTAK.tingkatan"
                   />
                   <label for="inputEmail">Tingkatan</label>
                 </div>
@@ -109,7 +104,11 @@ async function validateTAK() {
                   <label for="inputPass">Point TAK</label>
                 </div>
                 <label class="mb-2" for="inputDoc">Gambar</label>
-                <img :src="image" class="img-fluid" :alt="name" />
+                <img
+                  :src="dataTAK.image"
+                  class="img-fluid"
+                  :alt="dataTAK.name"
+                />
                 <div
                   class="d-flex align-items-center justify-content-md-end mt-4 mb-0"
                 >
@@ -126,14 +125,14 @@ async function validateTAK() {
   </div>
   <tr>
     <th>{{ index + 1 }}</th>
-    <td>{{ name }}</td>
-    <td>{{ point_TAK }}</td>
-    <td>{{ tingkatan }}</td>
-    <td>{{ verifed_status }}</td>
+    <td>{{ dataTAK.name }}</td>
+    <td>{{ dataTAK.point_TAK }}</td>
+    <td>{{ dataTAK.tingkatan }}</td>
+    <td>{{ dataTAK.verifed_status }}</td>
     <td>
       <button
         data-bs-toggle="modal"
-        :data-bs-target="`#viewDetail-${id}`"
+        :data-bs-target="`#viewDetail-${dataTAK.id}`"
         type="button"
         class="btn btn-dark btn-sm"
       >

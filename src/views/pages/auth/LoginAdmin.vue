@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import api from "@/api/api";
+import api from "@/api/api2";
 
 const router = useRouter();
 
@@ -14,21 +14,20 @@ const emit = defineEmits(["loadingStatus"]);
 
 async function handleLogin() {
   emit("loadingStatus", true);
-  const response = await api({
+  const response = await api("/admin/login", {
     method: "POST",
-    url: "/admin/login",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: localStorage.getItem("token") ?? "",
     },
-    data: { ...loginData },
+    body: { ...loginData },
   });
 
-  if (response.data.token) {
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("name", response.data.name);
-    localStorage.setItem("role", response.data.role);
+  if (response.token) {
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("name", response.name);
+    localStorage.setItem("role", response.role);
     //redirect to dashboard page
     router.push("/dashboard");
   } else {

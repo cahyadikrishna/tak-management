@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, PropType } from "vue";
 import { IDataTAK } from "@/interfaces/TAK";
-import api from "@/api/api";
+import apiFetch from "@/api/api2";
 
 const props = defineProps({
   index: { type: Number, default: 0 },
@@ -30,31 +30,29 @@ const options = {
 };
 
 async function editTAK() {
-  const response = await api({
+  const response = await apiFetch(`/tak/${props.dataTAK.id}`, {
     method: "PATCH",
-    url: `/tak/${props.dataTAK.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
-    data: { ...editedTAK },
+    body: { ...editedTAK },
   });
   if (response) {
-    alert(response.data.message);
+    alert(response.message);
   }
   props.displayListTAK();
 }
 
 //delete TAK
 async function deleteTAK() {
-  const response = await api({
+  const response = await apiFetch(`/tak/${props.dataTAK.id}`, {
     method: "DELETE",
-    url: `/tak/${props.dataTAK.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
   });
   if (response) {
-    alert(response.data.message);
+    alert(response.message);
   }
   props.displayListTAK();
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { IMahasiswaData } from "@/interfaces/Mahasiswa";
-import api from "@/api/api";
+import apiFetch from "@/api/api2";
 
 const props = defineProps({
   index: { type: Number, default: 0 },
@@ -16,15 +16,14 @@ const props = defineProps({
 
 //delete mahasiswa
 async function deleteMahasiswa() {
-  const response = await api({
+  const response = await apiFetch(`/mahasiswa/${props.dataMahasiswa.nim}`, {
     method: "DELETE",
-    url: `/mahasiswa/${props.dataMahasiswa.nim}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
   });
   if (response) {
-    alert(response.data.message);
+    alert(response.message);
   }
   props.displayListMahasiswa();
 }

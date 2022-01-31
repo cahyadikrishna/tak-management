@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, PropType } from "vue";
 import { IDataTAK } from "@/interfaces/TAK";
-import api from "@/api/api";
+import apiFetch from "@/api/api2";
 
 const props = defineProps({
   index: { type: Number, default: 0 },
@@ -20,19 +20,18 @@ const dataValidateTAK = reactive({
 });
 
 async function validateTAK() {
-  const response = await api({
+  const response = await apiFetch(`/tak/validate/${props.dataTAK.id}`, {
     method: "PATCH",
-    url: `/tak/validate/${props.dataTAK.id}`,
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
-    data: {
+    body: {
       pointTak: dataValidateTAK.pointTAK,
       status: true,
     },
   });
   if (response) {
-    alert(response.data.message);
+    alert(response.message);
   }
   props.displayTAK();
 }

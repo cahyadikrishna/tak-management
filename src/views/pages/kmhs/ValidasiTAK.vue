@@ -2,19 +2,18 @@
 import { ref } from "vue";
 import { IDataTAK } from "@/interfaces/TAK";
 import TableValidasiTAK from "@/views/content/tables/TableValidasiTAK.vue";
-import api from "@/api/api";
+import apiFetch from "@/api/api2";
 
 const validasiTAK = ref<IDataTAK[]>([]);
 
 async function displayTAK() {
-  const response = await api({
+  const response = await apiFetch("/tak?status=false", {
     method: "GET",
-    url: "/tak?status=false",
     headers: {
       Authorization: localStorage.getItem("token") ?? "",
     },
   });
-  validasiTAK.value = response.data;
+  validasiTAK.value = response;
 }
 displayTAK();
 </script>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import api from "@/api/api2";
+import apiFetch from "@/api/api2";
 
 const router = useRouter();
 
@@ -14,7 +14,7 @@ const emit = defineEmits(["loadingStatus"]);
 
 async function handleLogin() {
   emit("loadingStatus", true);
-  const response = await api("/admin/login", {
+  const response = await apiFetch("/admin/login", {
     method: "POST",
     headers: {
       Accept: "application/json",

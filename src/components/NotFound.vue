@@ -1,26 +1,13 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="error-template">
-          <h1>Oops!</h1>
-          <h2>404 Not Found</h2>
-          <div class="error-details">
-            Sorry, an error has occured, Requested page not found!
-          </div>
-          <div class="error-actions">
-            <a
-              href="http://www.jquery2dotnet.com"
-              class="btn btn-primary btn-lg"
-              ><span class="glyphicon glyphicon-home"></span> Take Me Home </a
-            ><a
-              href="http://www.jquery2dotnet.com"
-              class="btn btn-default btn-lg"
-              ><span class="glyphicon glyphicon-envelope"></span> Contact
-              Support
-            </a>
-          </div>
-        </div>
+    <div class="row justify-content-center align-items-center">
+      <div class="col text-center mt-5">
+        <h3 class="font-weight-bolder">Oops!</h3>
+        <h1 class="font-weight-bolder">404 Error</h1>
+      </div>
+      <div class="text-center">
+        <p>Pages you search doesn`t exist</p>
+        <router-link to="/" class="btn btn-primary">Back Home</router-link>
       </div>
     </div>
   </div>

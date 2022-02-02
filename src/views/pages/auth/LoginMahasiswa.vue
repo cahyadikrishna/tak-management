@@ -2,6 +2,7 @@
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import apiFetch from "@/api/api2";
+import { useLoading } from "@/store/Loading";
 
 const router = useRouter();
 
@@ -10,10 +11,10 @@ const loginData = reactive({
   password: "",
 });
 
-const emit = defineEmits(["loadingStatus"]);
+const load = useLoading();
 
 async function handleLogin() {
-  emit("loadingStatus", true);
+  load.doUpdateLoading(true);
   const response = await apiFetch("/mahasiswa/login", {
     method: "POST",
     headers: {
@@ -34,7 +35,7 @@ async function handleLogin() {
   } else {
     alert("Your data not Valid");
   }
-  emit("loadingStatus", false);
+  load.doUpdateLoading(false);
 }
 </script>
 

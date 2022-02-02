@@ -6,6 +6,7 @@ interface IMahasiswaData {
   gender: string;
   prodi: string;
   birth_date: string;
+  tak: [];
 }
 
 export { IMahasiswaData };

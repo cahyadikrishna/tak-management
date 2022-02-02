@@ -151,6 +151,11 @@ async function deleteMahasiswa() {
       >
         <i class="txt-white fas fa-eye"></i>
       </button>
+      <router-link
+        :to="`/detailmahasiswa/${dataMahasiswa.nim}`"
+        class="btn btn-warning btn-sm me-2"
+        >Detail</router-link
+      >
       <button
         type="button"
         class="btn btn-danger btn-sm"

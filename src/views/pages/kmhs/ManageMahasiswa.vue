@@ -3,10 +3,13 @@ import { ref, reactive } from "vue";
 import { IMahasiswaData } from "@/interfaces/Mahasiswa";
 import TableListMahasiswa from "@/views/content/tables/TableListMahasiswa.vue";
 import apiFetch from "@/api/api2";
+import { useLoading } from "@/store/Loading";
 
 const listMahasiswa = ref<IMahasiswaData[]>([]);
 
+const load = useLoading();
 async function displayListMahasiswa() {
+  load.doUpdateLoading(true);
   const response = await apiFetch("/mahasiswa", {
     method: "GET",
     headers: {
@@ -14,6 +17,7 @@ async function displayListMahasiswa() {
     },
   });
   listMahasiswa.value = response;
+  load.doUpdateLoading(false);
 }
 displayListMahasiswa();
 

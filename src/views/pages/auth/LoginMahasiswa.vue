@@ -2,6 +2,7 @@
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import apiFetch from "@/api/api2";
+import Loader from "@/components/Loader.vue";
 import { useLoading } from "@/store/Loading";
 
 const router = useRouter();
@@ -80,7 +81,15 @@ async function handleLogin() {
             </form>
           </div>
         </div>
+        <Loader v-if="load.loading" class="loader" />
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.loader {
+  margin: 50px;
+  height: 50px !important;
+}
+</style>

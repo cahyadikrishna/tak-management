@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { IAdminData } from "@/interfaces/Admin";
+import { useLoading } from "@/store/Loading";
 import TableListAdmin from "@/views/content/tables/TableListAdmin.vue";
+import Loader from "@/components/Loader.vue";
 import apiFetch from "@/api/api2";
+
+const load = useLoading();
 
 const listAdmin = ref<IAdminData[]>([]);
 
 async function displayListAdmin() {
+  load.doUpdateLoading(true);
   const response = await apiFetch("/admin", {
     method: "GET",
     headers: {
@@ -14,6 +19,7 @@ async function displayListAdmin() {
     },
   });
   listAdmin.value = response;
+  load.doUpdateLoading(false);
 }
 displayListAdmin();
 
@@ -145,6 +151,9 @@ async function registerAdmin() {
             <th scope="col">Email</th>
             <th scope="col">Actions</th>
           </tr>
+          <td colspan="6">
+            <Loader v-if="load.loading" class="loader" />
+          </td>
         </thead>
         <tbody>
           <TableListAdmin
@@ -158,3 +167,9 @@ async function registerAdmin() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.loader {
+  height: 80px !important;
+}
+</style>

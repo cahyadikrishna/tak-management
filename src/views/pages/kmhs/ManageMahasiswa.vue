@@ -2,12 +2,14 @@
 import { ref, reactive } from "vue";
 import { IMahasiswaData } from "@/interfaces/Mahasiswa";
 import TableListMahasiswa from "@/views/content/tables/TableListMahasiswa.vue";
+import Loader from "@/components/Loader.vue";
 import apiFetch from "@/api/api2";
 import { useLoading } from "@/store/Loading";
 
+const load = useLoading();
+
 const listMahasiswa = ref<IMahasiswaData[]>([]);
 
-const load = useLoading();
 async function displayListMahasiswa() {
   load.doUpdateLoading(true);
   const response = await apiFetch("/mahasiswa", {
@@ -215,6 +217,9 @@ async function registerMahasiswa() {
             <th scope="col">Email</th>
             <th scope="col">Actions</th>
           </tr>
+          <td colspan="6">
+            <Loader v-if="load.loading" class="loader" />
+          </td>
         </thead>
         <tbody>
           <TableListMahasiswa
@@ -228,3 +233,9 @@ async function registerMahasiswa() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.loader {
+  height: 80px !important;
+}
+</style>

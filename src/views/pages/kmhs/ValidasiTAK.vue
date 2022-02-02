@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { IDataTAK } from "@/interfaces/TAK";
+import { useLoading } from "@/store/Loading";
 import TableValidasiTAK from "@/views/content/tables/TableValidasiTAK.vue";
+import Loader from "@/components/Loader.vue";
 import apiFetch from "@/api/api2";
 
+const load = useLoading();
 const validasiTAK = ref<IDataTAK[]>([]);
 
 async function displayTAK() {
+  load.doUpdateLoading(true);
   const response = await apiFetch("/tak?status=false", {
     method: "GET",
     headers: {
@@ -14,6 +18,7 @@ async function displayTAK() {
     },
   });
   validasiTAK.value = response;
+  load.doUpdateLoading(false);
 }
 displayTAK();
 </script>
@@ -35,6 +40,9 @@ displayTAK();
             <th scope="col">Status</th>
             <th scope="col">Actions</th>
           </tr>
+          <td colspan="6">
+            <Loader v-if="load.loading" class="loader" />
+          </td>
         </thead>
         <tbody>
           <TableValidasiTAK
@@ -48,3 +56,9 @@ displayTAK();
     </div>
   </div>
 </template>
+
+<style scoped>
+.loader {
+  height: 80px !important;
+}
+</style>

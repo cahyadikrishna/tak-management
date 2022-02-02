@@ -3,16 +3,14 @@ import { ref } from "vue";
 import "./assets/js/scripts.js";
 import "./assets/css/styles.css";
 import Loader from "@/components/Loader.vue";
+import { useLoading } from "@/store/Loading";
 
-const loading = ref(false);
-function doUpdateLoading(status: boolean) {
-  loading.value = status;
-}
+const load = useLoading();
 </script>
 
 <template>
-  <Loader v-if="loading" />
-  <div v-show="loading === false">
-    <router-view @loadingStatus="doUpdateLoading" />
+  <Loader v-if="load.loading" />
+  <div v-show="load.loading === false">
+    <router-view />
   </div>
 </template>

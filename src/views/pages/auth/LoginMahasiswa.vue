@@ -15,26 +15,29 @@ const loginData = reactive({
 const load = useLoading();
 
 async function handleLogin() {
-  load.doUpdateLoading(true);
-  const response = await apiFetch("/mahasiswa/login", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token") ?? "",
-    },
-    body: { ...loginData },
-  });
+  try {
+    load.doUpdateLoading(true);
+    const response = await apiFetch("/mahasiswa/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token") ?? "",
+      },
+      body: { ...loginData },
+    });
 
-  if (response.token) {
-    localStorage.setItem("token", response.token);
-    localStorage.setItem("name", response.name);
-    localStorage.setItem("role", response.role);
-    localStorage.setItem("nim", response.nim);
-    //redirect to dashboard page
-    router.push("/dashboard");
-  } else {
-    alert("Your data not Valid");
+    if (response.token) {
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("name", response.name);
+      localStorage.setItem("role", response.role);
+      localStorage.setItem("nim", response.nim);
+      //redirect to dashboard page
+      router.push("/dashboard");
+    }
+  } catch (error: any) {
+    load.doUpdateLoading(false);
+    alert(error.data.message);
   }
   load.doUpdateLoading(false);
 }

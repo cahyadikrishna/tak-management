@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import { RouteRecordRaw } from "vue-router";
 import Login from "@/views/pages/auth/LoginMahasiswa.vue";
 import LoginAdmin from "@/views/pages/auth/LoginAdmin.vue";
-import Dashboard from "@/layout/Dashboard.vue";
+import Dashboard from "@/layouts/Dashboard.vue";
 import Home from "@/views/pages/kmhs/Home.vue";
 import ValidasiTAK from "@/views/pages/kmhs/ValidasiTAK.vue";
 import UploadTAK from "@/views/pages/kmhs/UploadTAK.vue";
